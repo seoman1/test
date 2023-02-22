@@ -245,39 +245,33 @@ class ControllerExtensionModuleQParse extends Controller
                         ->setCellValueExplicit("Y" . $i, $p['rels'], PHPExcel_Cell_DataType::TYPE_STRING)
                         ->setCellValue("Z" . $i, $p['Cashback']);
                 
-                // $c=0;
-                // foreach($p['attr'] as $a) {
-                //     $b = $c+1;
-                //     if ($c < count($cl)) {
-                //         $objAdd->setActiveSheetIndex(0)
-                //             ->setCellValue($cl[$c].$i, $a['attr_name_ru'])
-                //             ->setCellValue($cl[$b].$i, $a['attr_text_ru']);
-                //     }
-                //     $c+=4;
-                // }
-                // $i++;
+$c = 0;
+$d = count($cl) - count($p['attr']) * 2; // начинаем со столбца справа от последнего столбца таблицы
+$attrs_count = count($p['attr']);
 
+// добавляем украинские атрибуты
+for ($j = 0; $j < $attrs_count-1; $j++) {
+    if (isset($p['attr'][$j]['attr_name_ua']) && isset($p['attr'][$j]['attr_text_ua'])) {
+        $objAdd->setActiveSheetIndex(0)
+            ->setCellValue($cl[$d].$i, $p['attr'][$j]['attr_name_ua'])
+            ->setCellValue($cl[$d+1].$i, $p['attr'][$j]['attr_text_ua']);
 
+        $d += 2;
+    }
+}
 
+// добавляем русские атрибуты
+foreach ($p['attr'] as $a) {
+    if ($c < count($cl)) {
+        $objAdd->setActiveSheetIndex(0)
+            ->setCellValue($cl[$c].$i, $a['attr_name_ru'])
+            ->setCellValue($cl[$c+1].$i, $a['attr_text_ru']); 
+    }
 
-            $c = 0;
-            $d = count($cl) - 2; // начинаем со столбца справа от последнего столбца таблицы
-            foreach ($p['attr'] as $a) {
-                if ($c < count($cl)) {
-                    $objAdd->setActiveSheetIndex(0)
-                        ->setCellValue($cl[$c].$i, $a['attr_name_ru'])
-                        ->setCellValue($cl[$c+1].$i, $a['attr_text_ru']);
-                }
-                if (isset($a['attr_name_ua']) && isset($a['attr_text_ua'])) {
-                    $objAdd->setActiveSheetIndex(0)
-                        ->setCellValue($cl[$d].$i, $a['attr_name_ua'])
-                        ->setCellValue($cl[$d+1].$i, $a['attr_text_ua']);
+    $c += 2;
+}
 
-                    $d -= 2; // уменьшаем индекс столбца на 2, чтобы перейти к следующей паре столбцов
-                }
-                $c += 2;
-            }
-            $i++;
+$i++;
 
 
             }
