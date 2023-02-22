@@ -1,0 +1,312 @@
+<?php
+
+class ControllerExtensionModuleQParse extends Controller
+{
+    private $error = array();
+    private $filename = 'q_parse.xlsx';
+    private $prefix_path = DIR_DOWNLOAD;
+
+    public function index() {
+        
+        if(isset($_REQUEST['action']) && $_REQUEST['action']=='export')
+        {
+
+
+
+            $cl=Array("AA","AB","AC","AD","AE","AF","AG","AH","AI","AJ","AK","AL","AM","AN","AO","AP","AQ","AR","AS","AT","AU","AV","AW","AX","AY","AZ","BA","BB","BC","BD","BE","BF","BG","BH","BI","BJ","BK","BL","BM","BN","BO","BP","BQ","BR","BS","BT","BU","BV","BW","BX","BY","BZ","CA","CB","CC","CD","CE","CF","CG","CH","CI","CJ","CK","CL","CM","CN","CO","CP","CQ","CR","CS","CT","CU","CV","CW","CX","CY","CZ","DA","DB","DC","DD","DE","DF","DG","DH","DI","DJ","DK","DL","DM","DN","DO","DP","DQ","DR","DS","DT","DU","DV","DW","DX","DY","DZ","EA","EB","EC","ED","EE","EF","EG","EH","EI","EJ","EK","EL","EM","EN","EO","EP","EQ","ER","ES","ET","EU","EV","EW","EX","EY","EZ","FA","FB","FC","FD","FE","FF","FG","FH","FI","FJ","FK","FL","FM","FN","FO","FP","FQ","FR","FS","FT","FU","FV","FW","FX","FY","FZ","GA","GB","GC","GD","GE","GF","GG","GH","GI","GJ","GK","GL","GM","GN","GO","GP","GQ","GR","GS","GT","GU","GV","GW","GX","GY","GZ","HA","HB","HC","HD","HE","HF","HG","HH","HI","HJ","HK","HL","HM","HN","HO","HP","HQ","HR","HS","HT","HU","HV","HW","HX","HY","HZ","IA","IB","IC","ID","IE","IF","IG","IH","II","IJ","IK","IL","IM","IN","IO","IP","IQ","IR","IS","IT","IU","IV","IW","IX","IY","IZ","JA","JB","JC","JD","JE","JF","JG","JH","JI","JJ","JK","JL","JM","JN","JO","JP","JQ","JR","JS","JT","JU","JV","JW","JX","JY","JZ","KA","KB","KC","KD","KE","KF","KG","KH","KI","KJ","KK","KL","KM","KN","KO","KP","KQ","KR","KS","KT","KU","KV","KW","KX","KY","KZ","LA","LB","LC","LD","LE","LF","LG","LH","LI","LJ","LK","LL","LM","LN","LO","LP","LQ","LR","LS","LT","LU","LV","LW","LX","LY","LZ","MA","MB","MC","MD","ME","MF","MG","MH","MI","MJ","MK","ML","MM","MN","MO","MP","MQ","MR","MS","MT","MU","MV","MW","MX","MY","MZ","NA","NB","NC","ND","NE","NF","NG","NH","NI","NJ","NK","NL","NM","NN","NO","NP","NQ","NR","NS","NT","NU","NV","NW","NX","NY","NZ","OA","OB","OC","OD","OE","OF","OG","OH","OI","OJ","OK","OL","OM","ON","OO","OP","OQ",'OR',"OS","OT","OU","OV","OW","OX","OY","OZ","PA","PB","PC","PD","PE","PF","PG","PH","PI","PJ","PK","PL","PM","PN","PO","PP","PQ","PR","PS","PT","PU","PV","PW","PX","PY","PZ","QA","QB","QC","QD","QE","QF","QG","QH","QI","QJ","QK","QL","QM","QN","QO","QP","QQ","QR","QS","QT","QU","QV","QW","QX","QY","QZ","RA","RB","RC","RD","RE","RF","RG","RH","RI","RJ","RK","RL","RM","RN","RO","RP","RQ","RR","RS","RT","RU","RV","RW","RX","RY","RZ","SA","SB","SC","SD","SE","SF","SG","SH","SI","SJ","SK","SL","SM","SN","SO","SP","SQ","SR","SS","ST","SU","SV","SW","SX","SY","SZ","TA","TB","TC","TD","TE","TF","TG","TH","TI","TJ","TK","TL","TM","TN","TO","TP","TQ","TR","TS","TT","TU","TV","TW","TX","TY","TZ","UA","UB","UC","UD","UE","UF","UG","UH","UI","UJ","UK","UL","UM","UN","UO","UP","UQ","UR","US","UT","UU","UV","UW","UX","UY","UZ","VA","VB","VC","VD","VE","VF","VG","VH","VI","VJ","VK","VL","VM","VN","VO","VP","VQ","VR","VS","VT","VU","VV","VW","VX","VY","VZ","WA","WB","WC","WD","WE","WF","WG","WH","WI","WJ","WK","WL","WM","WN","WO","WP","WQ","WR","WS","WT","WU","WV","WW","WX","WY","WZ","XA","XB","XC","XD","XE","XF","XG","XH","XI","XJ","XK","XL","XM","XN","XO","XP","XQ","XR","XS","XT","XU","XV","XW","XX","XY","XZ","YA","YB","YC","YD","YE","YF","YG","YH","YI","YJ","YK","YL","YM","YN","YO","YP","YQ","YR","YS","YT","YU","YV","YW","YX","YY","YZ","ZA","ZB","ZC","ZD","ZE","ZF","ZG","ZH","ZI","ZJ","ZK","ZL","ZM","ZN","ZO","ZP","ZQ","ZR","ZS","ZT","ZU","ZV","ZW","ZX","ZY","ZZ");
+            $this->load->model('catalog/product');
+            $this->load->model('localisation/language');
+            $this->load->model('catalog/category');
+            $this->load->model('setting/setting');
+            $this->load->model('catalog/attribute');
+            $data['languages'] = $this->model_localisation_language->getLanguages();
+            $where='';
+            if(isset($_REQUEST['from']) && $_REQUEST['from']>0)
+            {
+                $where.=' AND product_id>='.(int)$_REQUEST['from'];
+            }
+            if(isset($_REQUEST['to']) && $_REQUEST['to']>0)
+            {
+                $where.=' AND product_id<='.(int)$_REQUEST['to'];
+            }
+
+            $list_id = '';
+            if (isset($_REQUEST['list_id']) && $_REQUEST['list_id'] > 0) {
+                $where .= ' AND product_id IN ('.$_REQUEST['list_id'].')';
+            }
+
+            $limit='';
+            if(isset($_REQUEST['limit']) && $_REQUEST['limit']>0)
+            {
+                $limit=' LIMIT '.(int)$_REQUEST['limit'];
+            }
+            $cats='';
+            if(isset($_REQUEST['product_category']))
+            {
+                $cats=implode(",", $_REQUEST['product_category']);
+                $where.=' AND category_id IN ('.$cats.')';
+            }
+
+
+
+
+            
+
+            if($cats!='')
+            {
+                $query = $this->db->query("SELECT `product_id` FROM " . DB_PREFIX . "product_to_category WHERE 1=1 ".$where." ORDER BY product_id".$limit);
+            }else{
+                $query = $this->db->query("SELECT `product_id` FROM " . DB_PREFIX . "product WHERE 1=1 ".$where." ORDER BY product_id".$limit);
+            }
+
+            
+
+            $prods=Array();
+            foreach ($query->rows as $product) {
+                $product_info = $this->model_catalog_product->getProduct($product['product_id']);
+                $product_description=$this->model_catalog_product->getProductDescriptions($product['product_id']);
+
+                $dt['model']=$product_info['model'];
+                $dt['name_ru']=$product_description[1]['name'];
+                $dt['name_ua']=$product_description[2]['name'];
+                
+                $query = $this->db->query("SELECT `short_description` FROM " . DB_PREFIX . "product_description WHERE product_id=".$product['product_id']." AND language_id=1");
+                $dt['short_description_ru']=html_entity_decode($query->row['short_description'], ENT_QUOTES, 'UTF-8');
+
+                $query = $this->db->query("SELECT `short_description` FROM " . DB_PREFIX . "product_description WHERE product_id=".$product['product_id']." AND language_id=2");
+                $dt['short_description_ua']=html_entity_decode($query->row['short_description'], ENT_QUOTES, 'UTF-8');
+
+                $dt['desc_ru']=html_entity_decode($product_description[1]['description'], ENT_QUOTES, 'UTF-8');
+                $dt['desc_ua']=html_entity_decode($product_description[2]['description'], ENT_QUOTES, 'UTF-8');
+                $dt['keys_ru']=$product_description[1]['meta_keyword'];
+                $dt['keys_ua']=$product_description[2]['meta_keyword'];
+                $dt['CatalogVisible']=$product_info['status'];
+                switch ($product_info['stock_status_id']){
+                    case '7':
+                        $stock_status_id = 1;
+                        break;
+                    case '9':
+                        $stock_status_id = 2;
+                        break;
+                    default:
+                        $stock_status_id = 0;
+                        break;
+                }
+
+                $dt['InStock'] = $stock_status_id;
+                $dt['Cashback'] = $product_info['cashback'];
+                $dt['service_available'] = $product_info['service_available'];
+                $dt['credit_available'] = $product_info['credit_available'];
+                $dt['sticker_new'] = $product_info['sticker_new'];
+                $dt['sticker_top'] = $product_info['sticker_top'];
+                $dt['sticker_shipping'] = $product_info['sticker_shipping'];
+                $dt['changeNameShortFull'] = 1;
+
+                $dt['Currency'] = $product_info['currency'];
+                
+                $categories = $this->model_catalog_product->getProductCategories($product['product_id']);
+                
+                if(isset($categories[0])) {
+                    $dt['CategoryID']=$categories[0];
+                } else {
+                    $dt['CategoryID']='';
+                }
+
+                $product_images = $this->model_catalog_product->getProductImages($product['product_id']);
+                $pim=Array();
+
+                foreach($product_images as $im) {
+                    $pim[] = 'https://www.albatros-santeh.com.ua/image/'.$im['image'];
+                }
+
+                $pim[] = 'https://www.albatros-santeh.com.ua/image/'.$product_info['image'];
+                $dt['images']=implode(";", $pim);
+
+                $product_specials = $this->model_catalog_product->getProductSpecials($product['product_id']);
+
+                $product_currency = $product_info['currency'];
+                $curs_currency = $this->db->query("SELECT value FROM " . DB_PREFIX . "currency WHERE title = '" . $product_currency . "'")->row['value'];
+
+                $product_price = $product_info['price'];
+
+                if ($product_info['currency'] != 'uah') {
+                    $product_price = $product_info['price'] / (float)$curs_currency;;
+                }
+
+
+                if (isset($product_specials[0]['price'])) {
+                    $ps = $product_specials[0]['price'];
+                    $product_special = (float)$ps / (float)$curs_currency;
+                } else {
+                    $product_special = false;
+                }
+
+
+                if (isset($product_specials[0]['price'])) {
+                    $dt['OldPrice'] = $product_price;
+                    $dt['Price'] = $product_special;
+                    $dt['is_special'] = 1;
+                    $dt['special_date'] = $product_specials[0]['date_end'];
+                } else {
+                    $dt['OldPrice'] = '';
+                    $dt['Price'] = $product_price;
+                    $dt['is_special'] = 0;
+                    $dt['special_date'] = '0000-00-00';
+                }
+
+
+
+                $related = $this->model_catalog_product->getProductRelated($product['product_id']);
+                $rels=Array();
+
+                foreach ($related as $product_id) {
+                    $related_info = $this->model_catalog_product->getProduct($product_id);
+                    $rels[]=$related_info['model'];
+                }
+
+                $attr_ru=[];
+                $dt['rels']=implode("$", $rels);
+
+                $product_attributes1 = $this->db->query("SELECT ad.name, pa.text FROM " . DB_PREFIX . "attribute_description ad LEFT JOIN " . DB_PREFIX . "product_attribute pa ON (ad.attribute_id = pa.attribute_id) WHERE pa.product_id = " . $product['product_id'] . " AND ad.language_id=1 AND pa.language_id=1");
+
+                
+                foreach ($product_attributes1->rows as $result) {
+                    if ($result) {
+                        $attr_ru[] = array(
+                            'attr_name_ru'      => $result['name'],
+                            'attr_text_ru'      => $result['text']
+                       );
+                    }
+                }
+
+                $attr_ua=[];
+
+                $product_attributes2 = $this->db->query("SELECT ad.name, pa.text FROM " . DB_PREFIX . "attribute_description ad LEFT JOIN " . DB_PREFIX . "product_attribute pa ON (ad.attribute_id = pa.attribute_id) WHERE pa.product_id = " . $product['product_id'] . " AND ad.language_id=2 AND pa.language_id=2");
+
+                
+                foreach ($product_attributes2->rows as $result) {
+                    if ($result) {
+                        $attr_ua[] = array(
+                            'attr_name_ua'      => $result['name'],
+                            'attr_text_ua'      => $result['text']
+                       );
+                    }
+                }
+
+
+                $dt['attr'] = array();
+                for ($i = 0; $i < count($attr_ru); $i++) {
+                    $dt['attr'][] = array_merge($attr_ru[$i], $attr_ua[$i]);
+                }
+
+                // $dt['attr'] = array_merge_recursive($attr_ru, $attr_ua);
+                // $this->log->write(print_r($dt['attr'], true));
+
+                // $dt['attr'] = $attr;
+
+
+
+                $prods[]=$dt;
+                
+               //print_r($product_specials);
+                //print_r($dt);
+            }
+            require_once DIR_SYSTEM . "library/PHPExcel/PHPExcel.php";
+            require_once DIR_SYSTEM . "library/PHPExcel/PHPExcel/IOFactory.php";
+            $objExcel = new PHPExcel();
+            $objAdd = PHPExcel_IOFactory::load(DIR_APPLICATION.'export.xlsx');
+            $i=2;
+            foreach($prods as $p)
+            {
+                
+                $objAdd->setActiveSheetIndex(0)
+                        ->setCellValueExplicit("A" . $i, $p['model'], PHPExcel_Cell_DataType::TYPE_STRING)
+                        ->setCellValue("B" . $i, $p['name_ru'])
+                        ->setCellValue("C" . $i, $p['name_ua'])
+                        ->setCellValue("D" . $i, $p['short_description_ru'])
+                        ->setCellValue("E" . $i, $p['short_description_ua'])
+                        ->setCellValue("F" . $i, $p['desc_ru'])
+                        ->setCellValue("G" . $i, $p['desc_ua'])
+                        ->setCellValue("H" . $i, $p['keys_ru'])
+                        ->setCellValue("I" . $i, $p['keys_ua'])
+                        ->setCellValue("J" . $i, $p['CatalogVisible'])
+                        ->setCellValue("K" . $i, $p['Price'])
+                        ->setCellValue("L" . $i, $p['OldPrice'])
+                        ->setCellValue("M" . $i, $p['Currency'])
+                        ->setCellValue("N" . $i, $p['CategoryID'])
+                        ->setCellValue("O" . $i, $p['InStock'])
+                        ->setCellValue("P" . $i, $p['sticker_top'])
+                        ->setCellValue("Q" . $i, $p['sticker_new'])
+                        ->setCellValue("R" . $i, $p['is_special'])
+                        ->setCellValue("S" . $i, $p['special_date'])
+                        ->setCellValue("T" . $i, $p['changeNameShortFull'])
+                        ->setCellValue("V" . $i, $p['images'])
+                        ->setCellValue("W" . $i, $p['sticker_shipping'])
+                        ->setCellValueExplicit("Y" . $i, $p['rels'], PHPExcel_Cell_DataType::TYPE_STRING)
+                        ->setCellValue("Z" . $i, $p['Cashback']);
+                
+                // $c=0;
+                // foreach($p['attr'] as $a) {
+                //     $b = $c+1;
+                //     if ($c < count($cl)) {
+                //         $objAdd->setActiveSheetIndex(0)
+                //             ->setCellValue($cl[$c].$i, $a['attr_name_ru'])
+                //             ->setCellValue($cl[$b].$i, $a['attr_text_ru']);
+                //     }
+                //     $c+=4;
+                // }
+                // $i++;
+
+
+
+
+            $c = 0;
+            $d = count($cl) - 2; // начинаем со столбца справа от последнего столбца таблицы
+            foreach ($p['attr'] as $a) {
+                if ($c < count($cl)) {
+                    $objAdd->setActiveSheetIndex(0)
+                        ->setCellValue($cl[$c].$i, $a['attr_name_ru'])
+                        ->setCellValue($cl[$c+1].$i, $a['attr_text_ru']);
+                }
+                if (isset($a['attr_name_ua']) && isset($a['attr_text_ua'])) {
+                    $objAdd->setActiveSheetIndex(0)
+                        ->setCellValue($cl[$d].$i, $a['attr_name_ua'])
+                        ->setCellValue($cl[$d+1].$i, $a['attr_text_ua']);
+
+                    $d -= 2; // уменьшаем индекс столбца на 2, чтобы перейти к следующей паре столбцов
+                }
+                $c += 2;
+            }
+            $i++;
+
+
+            }
+
+            //exit;
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="export.xlsx"');
+            header('Cache-Control: max-age=0');
+            $objWriter = PHPExcel_IOFactory::createWriter($objAdd, 'Excel2007');
+            $objWriter->save('php://output');
+            exit;
+        }
+
+        $this->load->language('extension/module/q_parse');
+
+        $this->document->setTitle(strip_tags($this->language->get('heading_title')));
+
+        $this->load->model('setting/setting');
+
+        if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+            $this->model_setting_setting->editSetting('module_q_parse', $this->request->post);
+
+            $this->session->data['success'] = $this->language->get('text_success');
+
+            $this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=module', true));
+        }
+
+
+        $this->getMainPage();
+    }
+    
+   }
